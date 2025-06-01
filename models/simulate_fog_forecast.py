@@ -8,7 +8,7 @@ model = joblib.load('best_random_forest_model.pkl')
 
 # Retrieve data
 # NOTE: Ideally, would use an API for live data. Did not find a convenient one from same source as EPA5.
-# So, using existing data.
+# So, using already processed data -- the last 20% of which, which is not involved in model training/testing
 
 # Get the path to the data directory, relative to this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -35,6 +35,10 @@ df['is_fog_in_1h'] = df.groupby('station')['is_fog'].shift(-1)
 # Drop rows with missing target
 df = df.dropna(subset=['is_fog_in_1h'])
 df['is_fog_in_1h'] = df['is_fog_in_1h'].astype(int)
+
+# Only use last 20% of the data (unseen -- not previously used in training or testing model)
+split_index = int(len(df) * 0.8)
+df = df.iloc[split_index:]
 
 # Select variables that were used as features in training
 features = [

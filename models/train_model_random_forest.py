@@ -52,6 +52,10 @@ features = [
 ]
 target = 'is_fog_in_1h'
 
+# Split data into training and test sets (only use first 80% of data for splitting,
+# want to leave 20% completely unseen for later simulations/"forecasting")
+split_index = int(len(df) * 0.8)
+df = df.iloc[:split_index]
 X = df[features]
 y = df[target]
 
@@ -83,7 +87,9 @@ joblib.dump(best_rf, 'best_random_forest_model.pkl')
 print("Best parameters:", search.best_params_)
 # Best parameters: {'n_estimators': 300, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_features': 'sqrt', 'max_depth': None, 'class_weight': 'balanced'}
 
-""" # Test Code to Produce Classification Report and View Feature Importance Plot
+
+"""
+# Test Code to Produce Classification Report and View Feature Importance Plot
 # Train Random Forest
 best_rf = RandomForestClassifier(
     n_estimators=300,

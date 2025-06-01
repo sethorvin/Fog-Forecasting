@@ -51,6 +51,10 @@ features = [
 ]
 target = 'is_fog_in_1h'
 
+# Split data into training and test sets (only use first 80% of data for splitting,
+# want to leave 20% completely unseen for later simulations/"forecasting")
+split_index = int(len(df) * 0.8)
+df = df.iloc[:split_index]
 X = df[features]
 y = df[target]
 
